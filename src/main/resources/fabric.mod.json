@@ -1,0 +1,28 @@
+{
+	"schemaVersion": 1,
+	"id": "database-utils",
+	"version": "${version}",
+	"name": "Database Utils",
+	"description": "A simple mod for developers to make database usage easier",
+	"authors": [
+		"KGriffon"
+	],
+	"contact": {
+		"homepage": "https://modrinth.com/project/database-utils",
+		"sources": "https://github.com/kgriff0n/database-utils"
+	},
+	"license": "MIT",
+	"icon": "assets/database-utils/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"dev.kgriffon.databaseutils.DatabaseUtils"
+		]
+	},
+	"depends": {
+		"fabricloader": "*",
+		"minecraft": "*",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}
