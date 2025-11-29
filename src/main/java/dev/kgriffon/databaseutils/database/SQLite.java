@@ -4,6 +4,7 @@ import dev.kgriffon.databaseutils.DatabaseUtils;
 import dev.kgriffon.databaseutils.Type;
 
 import java.io.IOException;
+import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,8 +20,13 @@ public class SQLite extends Database {
         super(Type.SQLITE, "jdbc:sqlite:" + base, null, null);
         Path path = Paths.get(base);
         try {
-            Files.createDirectories(path.getParent());
+            Path parent = path.getParent();
+            if (parent != null) {
+                Files.createDirectories(parent);
+            }
             Files.createFile(path);
+        } catch (FileAlreadyExistsException ignored) {
+            // database already exist
         } catch (IOException e) {
             DatabaseUtils.LOGGER.error("Cannot create file {}", base);
         }

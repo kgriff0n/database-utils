@@ -23,7 +23,7 @@ public abstract class DatabaseQueries {
      * @param db a database
      */
     public void link(Database db) {
-        if (db != null) {
+        if (this.db != null) {
             DatabaseUtils.LOGGER.warn("A new database was linked after one had already been linked.");
         }
         this.db = db;
