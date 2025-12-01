@@ -6,6 +6,19 @@
 
 This mod includes some utilities for working with databases.   
 The most popular connectors are included directly in the mod JAR, which avoids having to import them into each mod and helps reduce the overall size of your projects.  
+
+To import this library, you must add the following to your build.gradle file.
+```groovy
+repositories {
+    maven { url "https://api.modrinth.com/maven" }
+}
+
+dependencies {
+    modImplementation "maven.modrinth:database-utils:1.0.0"
+}
+```
+_You will also need to place the jar in your `mods` folder (even in a development environment), otherwise the connectors to the databases will not initialize._
+
 ## 🖥️ Usage
 
 First, you need to define your own class `MyCustomDB`, which extends `DatabaseQueries`.  
