@@ -14,10 +14,9 @@ repositories {
 }
 
 dependencies {
-    modImplementation "maven.modrinth:database-utils:1.0.0"
+    implementation "maven.modrinth:database-utils:1.0.0"
 }
 ```
-_You will also need to place the jar in your `mods` folder (even in a development environment), otherwise the connectors to the databases will not initialize._
 
 ## 🖥️ Usage
 
