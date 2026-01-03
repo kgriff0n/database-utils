@@ -54,10 +54,10 @@ switch (type) {
 }
 ```
 Currently, this mod supports four databases:
-- MySQL
-- MariaDB
-- PostgreSQL
-- SQLite
+- MySQL (`mysql`)
+- MariaDB (`mariadb`)
+- PostgreSQL (`postgres`)
+- SQLite (`sqlite`)
 
 A test database is also provided if you want to do some tests using stub values.  
 Once your database has been initialized, you need to link it to your `MyCustomDB` implementation.
