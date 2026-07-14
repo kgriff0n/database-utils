@@ -20,13 +20,45 @@ dependencies {
 
 ## 🖥️ Usage
 
-First, you need to define your own class `MyCustomDB`, which extends `DatabaseQueries`.  
+Configuration is managed by this library. By using the following line, a `.properties` file is automatically created (if it does not already exist) and loaded from the `config` folder.
+
+```java
+Config config = new Config(MOD_ID);
+```
+
+In this example,  the file will be named `MOD_ID.properties`.  
+Here is an example configuration  file.
+
+```properties
+storage=postgres
+host=127.0.0.1
+port=5432
+database=minecraft_db
+user=user
+password=password
+```
+
+| Key      | Description                                                                         |
+|----------|-------------------------------------------------------------------------------------|
+| storage  | Database type. Must be one of: `postgres`, `mysql`, `mariadb`, `sqlite`, or `test`. |
+| host     | IP address or hostname of the database server                                       |
+| port     | Port used by the database server.                                                   |
+| database | Name of the database.                                                               |
+| user     | User used to connect to the database.                                               |
+| password | Password of the user.                                                               |
+
+
+Then, you need to define your own class `MyCustomDB`, which extends `DatabaseQueries`.  
 This class is intended to contain all SQL related methods.
 In this context, you have access to some method from `DatabaseQueries`, such as `getType`, which help you create an implementation compatible with multiple databases.
 
 ```java
 public class MyCustomDB extends DatabaseQueries {
 
+    public MyCustomDB(Database db) {
+        super(db);
+    }
+    
     @Override
     public void init() {
         try (Connection connection = getConnection()) {
@@ -37,36 +69,22 @@ public class MyCustomDB extends DatabaseQueries {
     }
     
     /* other methods */
+    
+    public void someMethod() {
+        /* ... */
+    }
 }
 ```
 
-You will also need to create a database instance. Here is a little code snippet that creates a database based on a string value. This value can be obtained, for example, from a configuration file.
+You will also need to create a database instance. This is where the `Config` object is used. The following code snippet retrieves the database defined in the configuration and initializes your `DatabaseQueries` implementation.
+
 ```java
-String name = /* ... */;
-Type type = DatabaseUtils.getType(name);
-Database db;
-switch (type) {
-    case MYSQL -> db = new MySQL(/* ... */);
-    case MARIADB -> db = new MariaDB(/* ... */);
-    case POSTGRESQL -> db = new PostgreSQL(/* ... */);
-    case SQLITE -> db = new SQLite(/* ... */);
-    case TEST -> db = new TestDB(/* ... */);
-}
+Database database = DatabaseUtils.getDatabase(config);
+MyCustomDB custom = new MyCustomDB(database);
 ```
-Currently, this mod supports four databases:
-- MySQL (`mysql`)
-- MariaDB (`mariadb`)
-- PostgreSQL (`postgres`)
-- SQLite (`sqlite`)
 
-A test database is also provided if you want to do some tests using stub values.  
-Once your database has been initialized, you need to link it to your `MyCustomDB` implementation.
+You can now call any query defined in your `DatabaseQueries` implementation through your `custom` instance.  
 
 ```java
-MyCustomDB custom = new MyCustomDB();
-custom.link(db);
-
-// You can now use methods that contain SQL
-custom.init();
-/* ... */
+custom.someMethod();
 ```

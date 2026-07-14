@@ -14,10 +14,10 @@ public abstract class Database {
 
     protected final ExecutorService executor;
 
-    private final Type type;
-    private final String uri;
-    private final String user;
-    private final String password;
+    protected final Type type;
+    protected final String uri;
+    protected final String user;
+    protected final String password;
 
     /**
      * Initializes a database.

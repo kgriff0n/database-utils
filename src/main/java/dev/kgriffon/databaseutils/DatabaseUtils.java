@@ -28,4 +28,18 @@ public class DatabaseUtils implements ModInitializer {
         }
         return Type.TEST;
     }
+
+    public static Database getDatabase(Config config) {
+        Database db = null;
+        Type type = getType(config.getStorage());
+        switch (type) {
+            case MYSQL -> db = new MySQL(config.getHost(), config.getPort(), config.getDatabase(), config.getUser(), config.getPassword());
+            case MARIADB -> db = new MariaDB(config.getHost(), config.getPort(), config.getDatabase(), config.getUser(), config.getPassword());
+            case POSTGRESQL -> db = new PostgreSQL(config.getHost(), config.getPort(), config.getDatabase(), config.getUser(), config.getPassword());
+            case SQLITE -> db = new SQLite(config.getDatabase());
+            case TEST -> db = new TestDB();
+        }
+        return db;
+    }
+
 }

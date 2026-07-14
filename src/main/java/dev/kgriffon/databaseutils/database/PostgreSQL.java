@@ -1,8 +1,13 @@
 package dev.kgriffon.databaseutils.database;
 
 import dev.kgriffon.databaseutils.Type;
+import dev.kgriffon.databaseutils.database.listener.ChannelRegistry;
+import dev.kgriffon.databaseutils.database.listener.NotificationHandler;
+import dev.kgriffon.databaseutils.database.listener.PostgresListener;
 
 public class PostgreSQL extends Database {
+
+    private final ChannelRegistry channelRegistry = new ChannelRegistry();
 
     /**
      * Initializes a PostgreSQL database.
@@ -29,5 +34,16 @@ public class PostgreSQL extends Database {
         super(Type.POSTGRESQL, "jdbc:postgresql://" + host + ":" + port + "/" + base + "?currentSchema=" + searchPath, user, password);
     }
 
-    //TODO implements listeners with an interface
+    public PostgresListener startListener() {
+        PostgresListener listener = new PostgresListener(uri, user, password, channelRegistry);
+        Thread listenerThread = new Thread(listener, "postgres-listener");
+        listenerThread.setDaemon(true);
+        listenerThread.start();
+        return listener;
+    }
+
+    public void listen(String channel, NotificationHandler handler) {
+        channelRegistry.register(channel, handler);
+    }
+
 }

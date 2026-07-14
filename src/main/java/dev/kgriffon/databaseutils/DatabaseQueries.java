@@ -12,21 +12,11 @@ import java.util.concurrent.ExecutorService;
  */
 public abstract class DatabaseQueries {
 
-    private Database db;
+    private final Database db;
 
-    public DatabaseQueries() {
-        db = null;
-    }
-
-    /**
-     * Links a database in order to execute queries.
-     * @param db a database
-     */
-    public void link(Database db) {
-        if (this.db != null) {
-            DatabaseUtils.LOGGER.warn("A new database was linked after one had already been linked.");
-        }
+    public DatabaseQueries(Database db) {
         this.db = db;
+        init();
     }
 
     /**
@@ -42,7 +32,8 @@ public abstract class DatabaseQueries {
     /**
      * @return the ExecutorService instance
      */
-    public ExecutorService getExecutor() {
+    public ExecutorService getExecutor() throws DatabaseLinkException {
+        checkLink();
         return db.getExecutor();
     }
 
@@ -70,7 +61,7 @@ public abstract class DatabaseQueries {
      * This method is intended to contain
      * the creation of database tables.
      */
-    public abstract void init();
+    protected abstract void init();
 
     private void checkLink() throws DatabaseLinkException {
         if (db == null) throw new DatabaseLinkException();
